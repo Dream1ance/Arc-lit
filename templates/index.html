@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+  <title>Arc-Lit|Home</title>
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <ul class="nav__links">
+        <div>
+          <li>
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="logo" />
+          </li>
+          <li><a href="#" onclick="">ABOUT</a></li>
+          <li><a href="#">SERVIES</a></li>
+          <li><a href="#">TERMS & CONDTIONS</a></li>
+        </div>
+        <li><a href="#">CONTACT</a></li>
+      </ul>
+    </nav>
+    <section class="section__container">
+      <h3>Future Towords AI</h3>
+      <h2>Arc-Lit</h2>
+      <button onclick=login()>
+        Try Now !
+        <span><i class="ri-arrow-right-line"></i></span>
+      </button>
+      <p>"Upload three links and let our chatbot analyze the articles for you! Our application employs 
+        cutting-edge AI to process the content from each link, providing insightful responses tailored to 
+        your queries during the chat conversation. Experience seamless information retrieval and 
+        personalized insights with just a few clicks."</p>
+      <div class="scroll__bottom">
+        <a href="#">
+          Click here
+          <span><i class="ri-arrow-up-circle-fill"></i></span>
+        </a>
+      </div>
+      <div class="socials">
+        <a href="#"><i class="ri-google-fill"></i></a>
+        <a href="#"><i class="ri-linkedin-box-fill"></i></a>
+        <a href="#"><i class="ri-bard-fill"></i></a>
+        <a href="#"><i class="ri-github-fill"></i></a>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+  <script>
+    function login() {
+        // Perform the logout action by redirecting to the logout URL
+        window.location.href = "{{ url_for('login') }}";
+    }
+</script>
+</body>
+
+</html>

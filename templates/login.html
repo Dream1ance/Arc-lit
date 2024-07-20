@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 3rem;
+        color: white;
+        margin-bottom: 0;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        font-size: 1.2rem;
+        color: white;
+        margin-bottom: 0.5rem;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        width: 20rem;
+      }
+
+      button {
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        color: black;
+        padding: 0.5rem 2rem;
+        cursor: pointer;
+      }
+
+      .alert {
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        padding: 0.5rem;
+        margin: 1rem 0;
+        width: 20rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+ <body>
+    <h1>Login</h1>
+    {% if alert %}
+      <div class="alert">{{ alert }}</div>
+    {% endif %}
+    <form method="post" action="{{ url_for('login') }}">
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" required />
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>
