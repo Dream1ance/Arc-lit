@@ -1,0 +1,13 @@
+pip -q install langchain_experimental langchain_core
+pip -q install google-generativeai
+pip -q install google-ai-generativelanguage
+pip -q install langchain-google-genai
+pip install unstructured
+pip install sentence-transformers
+pip install Chroma
+pip install chromadb
+pip install langchain
+pip install -U langchain-community
+pip install IPython 
+pip install langchain --upgrade
+pip install libmagic

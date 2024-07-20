@@ -1,0 +1,85 @@
+# !pip -q install langchain_experimental langchain_core
+# !pip -q install google-generativeai
+# !pip -q install google-ai-generativelanguage
+# !pip -q install langchain-google-genai
+# !pip install unstructured
+# !pip install sentence-transformers
+# !pip install Chroma
+# !pip install chromadb
+# !pip install langchain
+# !pip install -U langchain-community
+# !pip install IPython 
+# !pip install langchain --upgrade
+# !pip install libmagic
+
+import textwrap
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+import google.generativeai as genai
+from IPython.display import display
+from IPython.display import Markdown
+
+
+def to_markdown(text):
+  text = text.replace('•', '  *')
+  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+
+# Used to store your API key
+import os
+GOOGLE_API_KEY="AIzaSyBC6RzWwzmA2ipG7NJfO3oQ1W8CDXuhoaU"
+google_api_key = os.getenv('GOOGLE_API_KEY')
+genai.configure(api_key=google_api_key)
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.prompts import ChatPromptTemplate
+from langchain.chains import RetrievalQA
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import UnstructuredURLLoader
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings.sentence_transformer import (
+    SentenceTransformerEmbeddings,
+)
+
+models= ChatGoogleGenerativeAI(model="gemini-pro",google_api_key=GOOGLE_API_KEY,
+                             temperature=0.2, convert_system_message_to_human = True)
+
+def get_chatbot_response(link1,link2,link3,question):
+    loaders = UnstructuredURLLoader(urls=[link1,link2,link3])
+    print(link1,link2,link3)
+    data = loaders.load()
+    text_splitter = RecursiveCharacterTextSplitter(
+        # Set a really small chunk size, just to show.
+        chunk_size=1000,
+        chunk_overlap=500,
+    )
+    docs=text_splitter.split_documents(data)
+
+    embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+
+    db= Chroma.from_documents(docs, embedding_function).as_retriever(search_kwargs={"k":5}) #
+
+    qa_chain = RetrievalQA.from_chain_type(
+        models,
+        retriever=db,
+        return_source_documents=True )
+
+    template = """Immerse yourself in the provided context and let your creativity shine through in your response to the question below. While being concise, don't hesitate to explore imaginative possibilities. If uncertain about the answer, it's okay to acknowledge it without speculating. Remember to gracefully conclude your response with a warm "thanks for asking!"
+    Don't be afraid to think outside the box and bring a unique perspective to your answer. Additionally, include a link to the content you drew inspiration from at the end of your response, fostering transparency and allowing others to delve deeper if interested and Respone related to content Given to you
+    {context}
+    Question: {question}
+    /n
+    Source: 'source'
+    Imaginative Answer:"""
+    QA_CHAIN_PROMPT = ChatPromptTemplate.from_template(template) 
+    qa_chain = RetrievalQA.from_chain_type(
+        models,
+        retriever=db,
+        return_source_documents=True,
+        chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+    )
+
+    result = qa_chain({"query": question})
+
+    #display(result["result"])
+    return result["result"]
+
